@@ -1,0 +1,5 @@
+read_verilog systolic2x2.v
+hierarchy -check -top systolic2x2
+synth -top systolic2x2 -flatten
+tee -o logs/step9_stat.txt stat
+write_verilog -noattr systolic2x2_netlist.v

@@ -1,0 +1,26 @@
+
+4. Printing statistics.
+
+=== systolic2x2 ===
+
+   Number of wires:               2902
+   Number of wire bits:           3304
+   Number of public wires:          57
+   Number of public wire bits:     459
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:               3032
+     $_ANDNOT_                     793
+     $_AND_                        181
+     $_DFFE_PN0P_                  129
+     $_DFF_PN0_                     53
+     $_MUX_                        128
+     $_NAND_                       123
+     $_NOR_                        163
+     $_NOT_                        128
+     $_ORNOT_                      135
+     $_OR_                         362
+     $_XNOR_                       158
+     $_XOR_                        679
+

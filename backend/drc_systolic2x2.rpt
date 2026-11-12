@@ -1,0 +1,7 @@
+DRC 报告：systolic2x2（magic 8.3.678，sky130A，drc style drc(full)，PDK_ROOT=tools/pdk-root）
+被检对象：work/or-flow/systolic2x2.gds（SHA256 dc361503af2d7ab8cc0e02edbe1dc543f19403ed3b2d58ac52ad1877240c8dbe），顶层 systolic2x2，expand 后全层级检查
+脚本：work/drc_systolic2x2.tcl（沿用 mac4 的 drc_mac4.tcl，仅改GDS路径与顶层名）；原始日志 logs/magic_drc_systolic2x2.log（用时88s，rc=0）
+结果：DRC_TOTAL_COUNT: 0；drc listall why 输出 "No errors found."；顶层 drc list why 输出 "No errors found."
+按规则分类计数：无违例，各规则计数均为 0。
+对照：同一脚本与同一 magic/PDK 对 mac4 版图报出 2 处 li.3 违例，说明该检查流程能报出违例，0 不是流程失效。
+限定：magic 的 drc(full) 是 sky130A 规则的开源实现，不是 foundry 签核；未做 antenna、density 等专项检查；检查的是 magic 读 GDS 后的几何，GDS 由 magic 从 openroad 的 DEF 与 PDK 标准单元 GDS 合成。版图未做任何修改。

@@ -1,0 +1,12 @@
+LVS 报告：systolic2x2（版图提取 vs DEF 导出网表）
+结论：Final result: Circuits match uniquely.（netgen 1.5.272，sky130A_setup.tcl）
+数字：器件数 2295 = 2295；线网数 2332 = 2332；pin 列表等价；无 "no matching pin"；Device classes systolic2x2 and systolic2x2 are equivalent。
+配置（沿用 mac4 定位轮 v7/配置G 的结论，逐项如下）：
+ 1) 版图侧：magic 读"清除 fill 单元 li1/mcon 形状后的标准单元库副本"(work/lvs/lib_fill_no_li1.gds，由 scripts/mklib.py 从 PDK 的 GDS 生成，清除 8 个 fill 单元共 102 个 li1+mcon 形状；PDK 原文件与设计版图均未改) + min.tlef + sky130_fd_sc_hd.lef + 本设计 systolic2x2_final.def，extract（no capacitance/coupling/resistance/adjust, unique），ext2spice lvs → work/lvs/systolic2x2_layout.spice（脚本 work/lvs/ex.tcl，日志 logs/magic_extract_systolic2x2.log，18s）。
+ 2) 源侧：openroad 读 final.def 后 write_verilog -include_pwr_gnd → work/lvs/systolic2x2_final_pwr.v；strip_fill.py 去掉 fill/tap/decap 实例 4240 个（3701 filler + 539 tapcell，与 DEF 统计一致）→ systolic2x2_final_pwr_nofill.v。版图侧提取出的标准单元实例数亦为 2295。
+ 3) 比对：netgen -batch source work/lvs/lvs.tcl（readnet sky130_fd_sc_hd.spice；lvs 两侧；sky130A_setup.tcl），输出 work/lvs/lvs_comp.out，日志 logs/netgen_lvs_systolic2x2.log（3s）。
+限定（必须随结论一起读）：
+ - 比对对象是 DEF 导出的网表（布局后经 openroad 优化/CTS 的版本），不是 work/systolic2x2_sky130_netlist.v；映射网表与最终版图之间的对应由 openroad 流程保证，未另做形式验证。
+ - 为让提取不被 fill 单元里的 li1 造成伪连通，提取用的是清除了 fill 单元 li1/mcon 的库副本；因此结论适用于"fill/tap 不参与连接"的设计意图，版图里 fill 的 li1 是否在实际 GDS 中造成伪连通，本次 LVS 不覆盖（mac4 定位轮的同一做法）。
+ - netgen 对 fill/tap 在两侧一致地排除；setup 文件里 permute/property 为 sky130A 官方默认，没有为凑结果额外放宽。
+ - 开源 LVS，不是 foundry 签核。
