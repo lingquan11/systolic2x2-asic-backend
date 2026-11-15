@@ -1,0 +1,7 @@
+# Python缓存（golden.py等脚本运行生成）
+__pycache__/
+*.py[cod]
+
+# 仿真生成物（iverilog/vvp运行生成，不入库；RTL、测试台与向量是源文件，不在此列）
+*.vcd
+*.vvp
