@@ -33,6 +33,22 @@
 5. 流程工程化程度低：OpenROAD为2022年旧版、手写脚本流，LibreLane标准流程未跑通；过程中出现过空跑假成功、日志被覆盖等操作事故，均已在过程记录中如实标注。
 6. 规模小：仅2×2教学级设计，更大规模、更高利用率下未验证。
 
+## 目录
+
+| 路径 | 内容 |
+|---|---|
+| `rtl/` | RTL（`systolic2x2.v`）、自检测试台、金标准模型 `golden.py`、测试向量 |
+| `synth/` | Yosys 综合脚本、统计与通用网表 |
+| `backend/` | 物理流程脚本 `flow.tcl`、SDC、sky130 映射网表、STA/DRC/LVS 报告、最终 DEF |
+| `docs/` | `SPEC.md` 规格、`RESULT.md` 前端结果、`BACKEND_RESULT.md` 后端结果与工具版本 |
+
+## 怎么复现（读懂再跑）
+
+- 工具与版本见 `docs/BACKEND_RESULT.md` 第 2 节：Yosys 0.70、OpenSTA 2.3.1、OpenROAD 2.0_3175（2022 年旧版）、Magic 8.3.678、Netgen 1.5.272、KLayout 0.30.13，PDK 为 sky130A。
+- 前端仿真（`rtl/` 目录下，测试台从当前目录读 `vectors.hex`）：`iverilog -g2005 -o sim tb_systolic2x2.v systolic2x2.v && vvp sim`。命令按文件结构给出，**未在本仓库中重新实测**；`docs/RESULT.md` 记录的是 iverilog 12.0 的结果。
+- 综合（在 `rtl/` 目录下，脚本按相对路径读 `systolic2x2.v` 并写 `logs/`）：`mkdir -p logs && yosys ../synth/synth.ys`。同样未在本仓库重新实测。
+- 后端：`backend/flow.tcl` 里的路径（`/home/hatch/workspace/...`）是作者机器上的绝对路径，直接运行会失败，需要先改成自己的 PDK 与工作目录。**这条流程没有一键复现**，仓库保存的是证据与脚本，不是可移植的流程。
+
 ## 仓库内容说明
 
 本仓库含RTL与测试台、金标准模型、综合网表、sky130映射网表、STA/DRC/LVS报告与最终DEF。GDS为二进制文件（7.37MB），未存入本仓库，保存在完整交付包systolic2x2_full.zip中；后端逐轮过程记录见docs/BACKEND_RESULT.md所列的原始日志（不在本仓库）。
